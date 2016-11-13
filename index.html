@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html ng-app="charlotteIoTstore">
+    <head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+            <script type="text/javascript" src="app.js"> </script>
+        </head>
+        <body ng-controller="StoreController as store">
+        <div class="jumbotron">
+            <h1> Give Away Store </h1>
+            <p> Store to track the inventory of products, sponsors and the recipients </p>
+        </div>
+        <div class="container">
+            <ul class="list-group" >
+                <li class="list-group-item" ng-repeat="product in store.products">
+                <h1>{{product.name}}</h1>
+                <h2>{{product.quantity}}</h2>
+                <img ng-src="{{product.image}}" width="200" height="200" />
+                <p>{{product.sponsor}}</p>
+                <p>{{product.recipients}}
+                <button class="btn btn-success btn-lg btn-block" ng-show="product.canPurchase">Give Away</button>
+                <section  ng-controller="PanelController as panel">
+                    <ul class="nav nav-pills">
+                        <li ng-class="{active:panel.isSelected(1)}">  <a href ng-click="panel.selectTab(1)"> Description </a> </li>
+                        <li ng-class="{active:panel.isSelected(2)}"> <a href ng-click="panel.selectTab(2)"> Sponsor </a> </li>
+                        <li ng-class="{active:panel.isSelected(3)}"> <a href ng-click="panel.selectTab(3)"> Reviews </a> </li>
+                        </ul>
+                        <div class="panel" ng-show="panel.isSelected(1)">
+                            <h4>Description</h4>
+                            <blockquote>None yet</blockquote>
+                        </div>
+                        <div class="panel" ng-show="panel.isSelected(2)">
+                            <h4>Sponsor</h4>
+                            <blockquote>{{product.sponsor}}</blockquote>
+                        </div>
+                        <div class="panel" ng-show="panel.isSelected(3)">
+                            <h4>Reviews</h4>
+
+                            <form name="reviewForm" ng-controller="ReviewController as reviewCtrl" ng-submit="reviewForm.$valid && reviewCtrl.addReview(product)" novalidate>
+                            <blockquote>
+                                <b>Stars: {{reviewCtrl.review.stars}}</b>
+                                {{reviewCtrl.review.body}}
+                                <cite>by: {{reviewCtrl.review.author}}</cite>
+                            </blockquote>
+                                <select ng-model="reviewCtrl.review.stars" required>
+                                    <option value="1"> 1 star </option>
+                                    <option value="2"> 2 stars </option>
+                                    <option value="3"> 3 stars </option>
+                                    <option value="4"> 4 stars </option>
+                                    <option value="5"> 5 stars </option>
+                                </select>
+                                <textarea ng-model="reviewCtrl.review.body" required></textarea>
+                                <label>by:</label>
+                                <input ng-model="reviewCtrl.review.author" type="email" required/>
+                                <div>reviewForm is {{reviewForm.$valid}}</div>
+                                <input type="submit" value="Submit" />
+                            </form>
+                        </div>    
+                    </section>
+                </li>
+            </ul>
+        </div>
+        </body>
+
+</html>
